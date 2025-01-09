@@ -11,12 +11,7 @@ export class RegisterUserDto {
     @ApiProperty({example: 'jackroy@gmail.com'})
     @IsEmail({}, { message: 'Invalid email format' })
     @IsNotEmpty({ message: "Please enter your email." })
-    email: string;
-
-    @ApiProperty({ example: 'xyzuser' })
-    @IsString()    
-    @IsNotEmpty({ message: "Please enter your username." })
-    username: string;
+    email: string;    
 
     @ApiProperty()
     @IsString()    

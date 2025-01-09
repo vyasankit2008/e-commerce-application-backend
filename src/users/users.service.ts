@@ -14,22 +14,21 @@ export class UsersService {
   ) { }
 
   async createUser(registerUserDto: RegisterUserDto): Promise<Users> {
-    const { name, username, email, password, phone, role } = registerUserDto;
+    const { name, email, password, phone, role } = registerUserDto;
 
     try {      
       const existingUser = await this.userRepository.findOne({
-        where: [{ email }, { username }],
+        where: [{ email }],
       });
 
       if (existingUser) {
-        throw new ConflictException('Email or Username already exists');
+        throw new ConflictException('Email already exists');
       }
       
       const hashedPassword = await bcrypt.hash(password, 10);
 
       const newUser = this.userRepository.create({
-        name,
-        username,
+        name,        
         email,
         password: hashedPassword,
         phone,
@@ -41,7 +40,7 @@ export class UsersService {
       console.error('Error creating user:', error);
 
       if (error.code === '409') {
-        throw new ConflictException('Email or Username already exists');
+        throw new ConflictException('Email already exists');
       }
       throw new InternalServerErrorException(error.message || 'Something went wrong while creating user');
     }
@@ -74,8 +73,7 @@ export class UsersService {
         user: {
           id: user.id,
           name: user.name,
-          email: user.email,
-          username: user.username,
+          email: user.email,          
           phone: user.phone,
           role: user.role,
           createdat: user.createdat,

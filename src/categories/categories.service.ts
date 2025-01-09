@@ -10,16 +10,17 @@ export class CategoriesService {
         @InjectRepository(Category) private categoriesRepository: Repository<Category>,
     ) { }
 
-    async create(createCategoryDto: CreateCategoryDto): Promise<Category> {
+    async create(createCategoryDto: CreateCategoryDto): Promise<Category> {        
+        const categoryName = createCategoryDto.name.toLowerCase();
         const existingCategory = await this.categoriesRepository.findOne({
-            where: { name: createCategoryDto.name },
+            where: { name: categoryName },
         });
 
         if (existingCategory) {
             throw new ConflictException('Category name must be unique');
         }
-
-        const category = this.categoriesRepository.create(createCategoryDto);
+        
+        const category = this.categoriesRepository.create({ ...createCategoryDto, name: categoryName });
         return this.categoriesRepository.save(category);
     }
 
