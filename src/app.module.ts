@@ -6,6 +6,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { JwtModule } from '@nestjs/jwt';
 import { ProductsModule } from './products/products.module';
 import { CategoriesModule } from './categories/categories.module';
+import { CartModule } from './cart/cart.module';
+import { OrderModule } from './order/order.module';
 import * as dotenv from 'dotenv';
 dotenv.config();
 
@@ -20,6 +22,7 @@ dotenv.config();
       database: process.env.DB_DATABASE,
       entities: [__dirname + '/**/*.entity{.ts,.js}'],
       synchronize: true,
+      // logging: true,
     }),
     JwtModule.register({
       secret: process.env.JWT_SECRET,
@@ -27,7 +30,9 @@ dotenv.config();
     }),
     UsersModule,
     CategoriesModule,
-    ProductsModule],
+    ProductsModule,
+    CartModule,
+    OrderModule],
   controllers: [AppController],
   providers: [AppService],
 })

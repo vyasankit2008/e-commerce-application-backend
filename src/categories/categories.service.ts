@@ -25,6 +25,10 @@ export class CategoriesService {
     }
 
     async findAll(): Promise<Category[]> {
-        return this.categoriesRepository.find();
+        return this.categoriesRepository.find({
+            order: {
+                id: 'DESC',
+            },
+        });    
     }
 }
