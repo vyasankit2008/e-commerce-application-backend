@@ -54,32 +54,7 @@ export class CartService {
         }
 
         return await this.cartRepository.save(cart);
-    }
-
-    async createCart1(createCartDto: CreateCartDto): Promise<Cart> {
-        const { userId, items } = createCartDto;
-
-        const cart = this.cartRepository.create({ userId, items: [] });
-
-        for (const item of items) {
-            const product = await this.productRepository.findOne({ where: { id: item.productId } });
-
-            if (!product) {
-                throw new NotFoundException(`Product with ID ${item.productId} not found`);
-            }
-
-            const existingItem = cart.items.find(cartItem => cartItem.productId === item.productId);
-            // console.log('existingItem---->', existingItem);
-
-            cart.items.push({
-                productId: product.id,
-                quantity: item.quantity,
-                price: item.price,
-            });
-        }
-
-        return await this.cartRepository.save(cart);
-    }
+    }    
 
     async getCart(userId: string): Promise<Cart[]> {
         const carts = await this.cartRepository.find({
@@ -109,32 +84,7 @@ export class CartService {
         }
 
         return carts;
-    }
-
-    async deleteCart1(cartId: number): Promise<void> {
-        const cart = await this.cartRepository.findOne({ where: { id: cartId } });
-        if (!cart) {
-            throw new NotFoundException(`Cart not found for ID ${cartId}`);
-        }
-
-        await this.cartRepository.delete(cartId);
-    }
-
-    async deleteCart2(cartId: number, productId: number): Promise<void> {
-        const cart = await this.cartRepository.findOne({ where: { id: cartId } });
-        if (!cart) {
-            throw new NotFoundException(`Cart not found for ID ${cartId}`);
-        }
-
-        const itemIndex = cart.items.findIndex(item => item.productId === productId);
-        if (itemIndex === -1) {
-            throw new NotFoundException(`Item with product ID ${productId} not found in the cart`);
-        }
-
-        cart.items.splice(itemIndex, 1);
-        
-        await this.cartRepository.save(cart);
-    }
+    }    
 
     async deleteCart(cartId: number, productId: number): Promise<void> {
         const cart = await this.cartRepository.findOne({ where: { id: cartId }});

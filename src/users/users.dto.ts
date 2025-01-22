@@ -32,12 +32,12 @@ export class RegisterUserDto {
 }
 
 export class LoginUserDto {    
-    @ApiProperty({example: 'xyz@gmail.com'})
+    @ApiProperty({example: 'admin@gmail.com'})
     @IsEmail()
     @IsNotEmpty({message:"Please enter your email address."}) 
     email: string;
 
-    @ApiProperty({example: 'lg5o7C%Bz]fH0Rj'})
+    @ApiProperty({example: 'Admin@123'})
     @IsString()
     @IsNotEmpty({message:"Please enter your password."})
     @MinLength(7)

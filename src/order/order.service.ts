@@ -78,30 +78,7 @@ export class OrderService {
         } else {
             await this.cartRepository.save(cart);
         }
-    }
-
-    async createOrder1(createOrderDto: CreateOrderDto): Promise<Order> {
-        const { userId, items, shippingDetails, paymentMethod } = createOrderDto;
-
-        for (const item of items) {
-            const product = await this.productRepository.findOne({ where: { id: item.productId } });
-            if (!product) {
-                throw new NotFoundException(`Product with ID ${item.productId} not found`);
-            }
-        }
-
-        const totalAmount = items.reduce((sum, item) => sum + item.price * item.quantity, 0);
-
-        const order = this.orderRepository.create({
-            userId,
-            items,
-            shippingDetails,
-            paymentMethod,
-            totalAmount,
-        });
-
-        return await this.orderRepository.save(order);
-    }
+    }    
 
     async getOrder(userId: string): Promise<any> {
         const orders = await this.orderRepository.find({
